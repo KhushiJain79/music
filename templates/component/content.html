@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/styles/content.css">
+  
+</head>
+<body>
+    <div>
+     <h1 class="set-white-color">Explore Songs</h1>
+    </div>
+    <div>
+        <h1 class="set-white-color">Recommended Songs</h1>
+    </div>
+    <!-- Scanner -->
+     <div class="face-scanner bg-dark">
+ <p class="scan-mood-heading">Scan Mood</p>
+ <video id="video" width="320" height="240" autoplay></video>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <br>
+ <img src="https://cdn-icons-png.flaticon.com/128/711/711191.png" id="cameraBtn" class="scanner-image" onclick="startCamera()" height="50" width="50" alt="">
+    <p id="result" style="font-size: 20px; font-weight: bold;"></p>
+     </div>
+       <script src="/static/js/content.js"></script>
+</body>
+</html>

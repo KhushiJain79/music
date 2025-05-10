@@ -1,0 +1,54 @@
+.set-white-color{
+    margin: 10px;
+    color: white;
+}
+.face-scanner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width:200px;
+    height:300px;
+    right: 20px;
+    bottom: 20px;
+      box-shadow: 0 0 10px #888888;
+}
+.scan-mood-heading{
+    color: white;
+}
+.scanner-image{
+    border-radius: 5;
+    background-color: white;
+    padding: 5px;
+}
+ body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+
+    #video.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: 999;
+    }
+
+    #controls, #result {
+        z-index: 1000;
+        position: relative;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    #container {
+        text-align: center;
+    }
+
+    #video.hidden {
+        display: none;
+    }

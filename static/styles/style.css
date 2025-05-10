@@ -1,0 +1,40 @@
+.body-container{
+    background-color: black;
+}
+.searchbar{
+   border: none;
+}
+input::placeholder {
+  color: white !important;
+  opacity: 1; /* optional: ensures it's fully white and not transparent */
+}
+.topbar{
+    position: absolute;
+    right:10px;
+    width:auto;
+display: flex;
+flex-direction: column;
+}
+.searchbtn{
+ width:900px;
+  padding: 10px 20px;
+  height: 60px; /* reserve height */
+}
+/* Initially hide the sidebar off-screen */
+#Sidebar {
+  
+  position: fixed;
+  left: -280px; /* Move it off-screen */
+  top: 50;
+  height: 100%;
+  width: 280px;
+  /* background-color: #343a40; */
+  background-color: white;
+  transition: left 0.3s ease; /* Smooth transition when 'left' property changes */
+}
+
+/* When sidebar is toggled on, move it into view */
+#Sidebar.show {
+  left: 0;
+ 
+}
