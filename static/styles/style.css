@@ -1,40 +1,112 @@
-.body-container{
-    background-color: black;
+.body-container {
+  /* background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNewP94gmUo3TjFON-Xoji6gyl2RcNxmQqZw&s') no-repeat center center fixed; */
+  /* background-size: cover; */
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  backdrop-filter: blur(5px);
 }
-.searchbar{
-   border: none;
+.section-player{
+  background-color: black;
+  width: 30%;
+  border: 2px solid  yellow;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 input::placeholder {
-  color: white !important;
-  opacity: 1; /* optional: ensures it's fully white and not transparent */
+  color: #bfbfbf !important;
+  opacity: 0.9;
 }
-.topbar{
-    position: absolute;
-    right:10px;
-    width:auto;
-display: flex;
-flex-direction: column;
+.showimage{
+  height:200px;
+  width:200px;
 }
-.searchbtn{
- width:900px;
-  padding: 10px 20px;
-  height: 60px; /* reserve height */
+.musicwave{
+  height: 50px;
+  width:200px;
 }
-/* Initially hide the sidebar off-screen */
-#Sidebar {
-  
-  position: fixed;
-  left: -280px; /* Move it off-screen */
-  top: 50;
-  height: 100%;
-  width: 280px;
-  /* background-color: #343a40; */
-  background-color: white;
-  transition: left 0.3s ease; /* Smooth transition when 'left' property changes */
+.searchbar {
+  margin: 10px 0px;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  padding: 10px 15px;
+  color: #ffffff;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 12px rgba(0, 255, 245, 0.2);
 }
 
-/* When sidebar is toggled on, move it into view */
+.searchbar:focus {
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 14px rgba(0, 255, 245, 0.5);
+}
+
+.searchbtn {
+  width: 900px;
+  height: 60px;
+}
+
+.topbar {
+  width: 100%;
+  border: 2px solid red;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#Sidebar {
+  position: fixed;
+  left: -280px;
+  top: 55px;
+  height: 100%;
+  width: 280px;
+  background: linear-gradient(145deg, rgba(26, 24, 48, 0.8), rgba(16, 16, 29, 0.85));
+  backdrop-filter: blur(12px);
+  transition: left 0.4s ease;
+  z-index: 1000;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 #Sidebar.show {
   left: 0;
- 
+}
+
+#Sidebar .nav-link {
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  color: #dcdcdc;
+}
+
+#Sidebar .nav-link.active,
+#Sidebar .nav-link:hover {
+  background: linear-gradient(to right, #00fff5, #a259ff);
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00fff5;
+}
+
+.dropdown-toggle img {
+  border: 2px solid #00fff5;
+}
+
+.dropdown-menu {
+  background-color: rgba(24, 24, 24, 0.95);
+  backdrop-filter: blur(8px);
+  border: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 255, 245, 0.15);
+  color: #00fff5;
 }
