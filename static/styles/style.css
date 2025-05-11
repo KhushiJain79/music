@@ -170,7 +170,8 @@ input::placeholder {
 }
 
 .musicwave {
-  height: 50px;
+  margin-top: 10px;
+  height: 35px;
   width: 200px;
   animation: pulse 1s infinite ease-in-out;
   transform-origin: center;

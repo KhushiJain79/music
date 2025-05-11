@@ -29,9 +29,7 @@
     justify-content: space-evenly;  /* Ensures even spacing */
     align-items: center; /* Centers items vertically */
 }
-.content-container{
-    border:2px solid red;
-}
+
 
 .musictypes {
   margin: 0px 5px;
