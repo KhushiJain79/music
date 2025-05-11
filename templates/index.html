@@ -7,11 +7,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <script src="/static/js/index.js"></script>
   </head>
-  <body class="body-container bg-dark">
+  <body class="body-container">
     <nav
-      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4"
+      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4 mb-4"
     >
       <div class="container-fluid">
         <a class="navbar-brand text-glow" onclick="toggleSidebar()" href="#">Moodify</a>
@@ -29,23 +28,31 @@
         </button>
           <form class="search-bar searchbtn" role="search">
         <input
-          class="form-control me-2 flex-grow-1 searchbar"
+          class="form-control  flex-grow-1 searchbar"
           type="search"
           placeholder="Search Music"
           aria-label="Search"
         />
       </form>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
       </div>
+   
     </nav>
 <!-- for video player image -->
 
     <div class="topbar">
       <div class="section-player">
-           <img src="images/videoplayerfinal.png" class="showimage" alt="Image not showing">
-        <img class="musicwave" src="https://thumb.ac-illust.com/f4/f487fd8f335b8acb8a2538929682698a_t.jpeg" alt="">
+           <img src="C:\Users\Khushi\Desktop\DeepPracticals\Music-recommendation-system-master\images\videoplayerfinal.png" class="showimage" alt="Image not showing">
+        <img class="musicwave" src="https://cdn-icons-png.flaticon.com/128/1792/1792737.png" alt="">
       </div>
-  
-      {% include "component/content.html" %}
+    <div class="content-container">
+  {% include "component/content.html" %}
+</div>
+       <div class="face-scanner scanner-container">
+   <p class="scan-mood-heading">Scan Mood</p>
+   <img src="https://cdn-icons-png.flaticon.com/128/711/711191.png" class="scanner-image"  onclick="startCamera()" height="50" width="50" alt="">
+    <!-- <p id="result" style="font-size: 20px; font-weight: bold;"></p> -->
+     </div>
     </div>
 
     <div
@@ -95,5 +102,6 @@
     <form action="/recommend" method="post">
       <!-- <button type="submit">Start Webcam & Get Recommendation</button> -->
     </form>
+    <script src="/static/js/index.js"></script>
   </body>
 </html>
