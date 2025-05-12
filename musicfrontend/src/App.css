@@ -1,0 +1,270 @@
+:root {  
+  --bg-color: #121212;
+  --bg-sidebar:rgba(63, 57, 57, 0.788);
+  --text-color: #ffffff;
+  --accent-color: #00fff5;
+  --box-bg: rgba(0, 0, 0, 0.6);
+  --shadow-color: rgba(0, 255, 245, 0.2);
+  --bg-sidebar-color1: rgb(148, 140, 140);
+  --bg-sidebar-color2:  black;
+ 
+}
+
+body.light-theme {
+  --bg-color: #ffffff;
+  --bg-sidebar:rgb(211, 218, 224);
+  --text-color: #000000;
+  --accent-color: #a259ff;
+  --box-bg: rgba(240, 240, 240, 0.8);
+  --shadow-color: rgba(162, 89, 255, 0.2);
+    --bg-sidebar-color1: rgb(189, 185, 185);
+  --bg-sidebar-color2:  var(--bg-sidebar);
+}
+
+.body-container {
+  background-color: var(--bg-color);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  backdrop-filter: blur(5px);
+  transition: background-color 0.5s ease, color 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-player {
+  background-color: var(--box-bg);
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px var(--shadow-color);
+}
+
+input::placeholder {
+  color: #bfbfbf !important;
+  opacity: 0.9;
+}
+
+.searchbar {
+  margin: 10px 0;
+  border: none;
+  background: var(--box-bg);
+  border-radius: 12px;
+  color: var(--text-color);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 2px var(--shadow-color);
+}
+
+.searchbar:focus {
+  box-shadow: 0 0 14px var(--shadow-color);
+}
+
+.searchbtn {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.searchbtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.topbar {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  animation: fadeIn 1s ease-in;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Curtain Slide Effect */
+body.theme-transition .topbar::before {
+  left: 100%; /* Start the curtain completely out of view */
+}
+
+.topbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -110%; /* Start the curtain completely out of view */
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  transform: skewX(-15deg);
+  z-index: 10;
+  transition: left 0.8s ease-in-out;
+  pointer-events: none;
+}
+
+/* Fade-in animation for topbar */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sidebar styling */
+/* Sidebar styling */
+#Sidebar {
+  position: fixed;
+  top: 74px;
+  left: -100; /* Set the default left to 0 */
+  transform: translateX(-280px); /* Initially, the sidebar is off-screen */
+  height: 100%;
+  width: 280px;
+  background-color: var(--bg-sidebar); /* Dark background for the sidebar */
+  color: white;
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+  z-index: 10;
+}
+
+/* Sidebar shown when the state is true */
+#Sidebar.show {
+  transform: translateX(0); /* Move the sidebar in */
+}
+
+
+#Sidebar .nav-link {
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#Sidebar .nav-link::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 0;
+  top: 0;
+  left: 0;
+  background: rgba(0, 255, 245, 0.1);
+  transition: width 0.4s ease;
+  z-index: 0;
+}
+
+#Sidebar .nav-link:hover::before {
+  width: 100%;
+}
+
+#Sidebar .nav-link.active,
+#Sidebar .nav-link:hover {
+  margin: 8px;
+  background: linear-gradient(to right, var(--bg-sidebar-color1),var(--bg-sidebar-color2));
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+.dropdown-toggle img {
+  border: 2px solid var(--accent-color);
+}
+
+.dropdown-menu {
+  background-color: rgba(24, 24, 24, 0.95);
+  backdrop-filter: blur(8px);
+  border: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 255, 245, 0.15);
+  color: var(--accent-color);
+}
+
+.showimage {
+  height: 200px;
+  width: 200px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px var(--shadow-color);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.showimage:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px var(--shadow-color);
+}
+
+.musicwave {
+  margin-top: 10px;
+  height: 35px;
+  width: 200px;
+  animation: pulse 1s infinite ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes pulse {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(1.5); }
+  100% { transform: scaleY(1); }
+}
+
+.emoji {
+  font-size: 40px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.emoji:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 12px #ff69b4);
+}
+
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  font-size: 20px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+}
+
+.scan-mood-heading {
+  color: var(--text-color);
+}
+
+.face-scanner {
+  box-sizing: border-box;
+  box-shadow: 0 0 10px var(--shadow-color);
+  background-color: var(--box-bg);
+  border-radius: 10px;
+  width: 200px;
+  height: 200px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.scanner-image {
+  background-color: white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 5px;
+}
+
+.scanner-container {
+  margin: 30px;
+  background-color: var(--bg-color);
+}

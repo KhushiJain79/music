@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&family=Rubik+Wet+Paint&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital@0;1&display=swap');@import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Wet+Paint&family=VT323&display=swap');
+.musicemojis {
+  display: inline-block;
+  font-size: 30px;
+  margin: 0px 5px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+.set-content{
+      width: 100px;
+     font-family: "VT323", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+.musicemojis:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 10px #FFDF00) brightness(1.2);
+}
+.musicemojicontainer{
+     padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+}
+.mustictypescontainer {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;  /* Ensures even spacing */
+    align-items: center; /* Centers items vertically */
+}
+
+
+.musictypes {
+  margin: 0px 5px;
+    border: 2px dashed var(--text-color);
+    background-color: var(--box-bg);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    list-style: none;
+    padding: 4px 12px; /* Adds padding to make the items more clickable */
+    border-radius: 20px;  /* Rounded corners */
+}
+
+
+.musictypes:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+ cursor: pointer;
+}
+
+
+
+#controls, #result {
+  color: var(--text-color);
+}
