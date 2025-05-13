@@ -1,19 +1,16 @@
 import React from 'react'
 import '../App.css';
+import musicplayer from '../assets/videoplayerfinal.png';
 import { useRef } from 'react';
 import Content from './Content';
-const Home = ({newTheme}) => {
+const Home = ({toggleTheme}) => {
       const waveRef = useRef(null);
-       if (waveRef.current) {
-        waveRef.current.src = newTheme
-          ? 'https://cdn-icons-png.flaticon.com/128/4287/4287943.png'
-          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO_d-O6ZaaUOFD4XziP70sQXRcl1pUXTNwfg&s';
-      }
+      
   return (
       <div className="topbar">
         <div className="section-player">
           <img
-            src="./images/videoplayerfinal.png"
+            src={musicplayer}
             className="showimage"
             alt="Image not showing"
           />

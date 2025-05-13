@@ -1,16 +1,20 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Content from './components/Content';
+import { useEffect } from 'react';
+
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Home from './components/Home';
+import About from './components/About';
+// import Favourites from './components/Favourites'; // create this file
 
 function App() {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [isLightTheme, setLightTheme] = useState(false);
-
-
+  const waveRef = useRef(null);
+        
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
@@ -20,14 +24,12 @@ function App() {
     setLightTheme((prevTheme) => {
       const newTheme = !prevTheme;
 
-      // Change wave image
       if (waveRef.current) {
         waveRef.current.src = newTheme
           ? 'https://cdn-icons-png.flaticon.com/128/4287/4287943.png'
           : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO_d-O6ZaaUOFD4XziP70sQXRcl1pUXTNwfg&s';
       }
 
-      // Remove transition after 800ms
       setTimeout(() => {
         document.body.classList.remove('theme-transition');
       }, 800);
@@ -36,17 +38,24 @@ function App() {
     });
   };
 
-  // Apply theme class to body
   document.body.className = isLightTheme ? 'light-theme' : '';
 
   return (
-    <div className="body-container">
-   <Navbar toggleSidebar={toggleSidebar} toggleTheme={toggleTheme} isLightTheme={isLightTheme}/>
-<Home/>
-<Sidebar isSidebarVisible={isSidebarVisible}/>
-
-
-    </div>
+    <Router>
+      <div className="body-container">
+        <Navbar toggleSidebar={toggleSidebar} toggleTheme={toggleTheme} isLightTheme={isLightTheme} />
+        <div className="d-flex">
+        <Sidebar isSidebarVisible={isSidebarVisible} setSidebarVisible={setSidebarVisible} />
+          <div className="content-container" style={{ padding: '20px', width: '100%' }}>
+            <Routes>
+              <Route path="/" element={<Home toggleTheme={toggleTheme} />} />
+              <Route path="/about" element={<About />} />
+              {/* <Route path="/favourites" element={<Favourites />} /> */}
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </Router>
   );
 }
 
