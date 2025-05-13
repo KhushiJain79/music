@@ -1,17 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Music Recommendation</title>
-    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="/static/styles/style.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+      #face-scanner {
+        border: 2px dashed #666;
+        transition: box-shadow 0.3s ease;
+      }
+
+      #face-scanner:hover {
+        box-shadow: 0 0 10px #00ffc8;
+      }
+
+      button {
+        min-width: 160px;
+      }
+
+      #emotionResult {
+        font-weight: 500;
+      }
+
+      .scanner-image {
+        transition: transform 0.3s ease;
+      }
+
+      .scanner-image:hover {
+        transform: scale(1.1);
+      }
+
+      .one {
+        margin-top: 120vh;
+      }
+    </style>
   </head>
+
   <body class="body-container">
-    <nav
-      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4 mb-4"
-    >
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4 mb-4">
       <div class="container-fluid">
         <a class="navbar-brand text-glow" onclick="toggleSidebar()" href="#">Moodify</a>
         <button
@@ -26,50 +58,83 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-          <form class="search-bar searchbtn" role="search">
-        <input
-          class="form-control  flex-grow-1 searchbar"
-          type="search"
-          placeholder="Search Music By Artist"
-          aria-label="Search"
-        />
-      </form>
-      <button id="themeToggle" class="theme-toggle">🌙</button>
-      </div>
-   
-    </nav>
-<!-- for video player image -->
 
-    <div class="topbar">
-      <div class="section-player">
-           <img src="./images/videoplayerfinal.png" class="showimage" alt="Image not showing">
-        <img class="musicwave mt-5"  id="wave" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO_d-O6ZaaUOFD4XziP70sQXRcl1pUXTNwfg&s" alt="">
+        <form id="searchForm" class="d-flex ms-auto search-bar searchbtn" method="POST" action="/search">
+          <input
+            id="artistSearch"
+            name="artist"
+            class="form-control searchbar"
+            type="search"
+            placeholder="Search Music By Artist"
+            aria-label="Search"
+            required
+          />
+        </form>
+
+        <button id="themeToggle" class="theme-toggle ms-3">🌙</button>
       </div>
-    <div class="content-container">
-  {% include "component/content.html" %}
-</div>
-       <div class="face-scanner scanner-container">
-   <p class="scan-mood-heading">Scan Mood</p>
-   <img src="https://cdn-icons-png.flaticon.com/128/711/711191.png" class="scanner-image"  onclick="startCamera()" height="50" width="50" alt="">
-    <!-- <p id="result" style="font-size: 20px; font-weight: bold;"></p> -->
-     </div>
+    </nav>
+
+    <!-- Top Player Section -->
+    <div class="topbar d-flex flex-wrap justify-content-center">
+      <div class="section-player me-4 mb-4">
+        <img src="./images/videoplayerfinal.png" class="showimage" alt="Image not showing" />
+        <img
+          class="musicwave mt-3"
+          id="wave"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO_d-O6ZaaUOFD4XziP70sQXRcl1pUXTNwfg&s"
+          alt="Wave animation"
+        />
+      </div>
+
+      <div class="content-container">
+        {% include "component/content.html" %}
+      </div>
     </div>
 
+    <!-- Emotion and Recommendation Section -->
+    <div class="container" style="margin-top: 400px;">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <h3 class="text-light mb-3 mt-10">Scan Mood</h3>
+
+          <div
+            id="face-scanner"
+            class="d-inline-block p-3 bg-dark rounded shadow"
+            style="cursor: pointer;"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/711/711191.png"
+              class="scanner-image"
+              height="60"
+              width="60"
+              alt="Scan Icon"
+            />
+          </div>
+
+          <div class="mt-4">
+            <button class="btn btn-primary me-2" onclick="detectEmotion()">Detect Emotion</button>
+            <button class="btn btn-success" onclick="getRecommendations()">Get Recommendations</button>
+          </div>
+
+          <div id="emotionResult" class="mt-4 fs-5 text-light"></div>
+          <div id="recommendations" class="mt-4 text-light"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
     <div
       id="Sidebar"
-      class="d-flex flex-column flex-shrink-0 p-3"
+      class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white"
       style="width: 280px"
     >
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link active sidebar-link" aria-current="page">
-            Home
-          </a>
+          <a href="#" class="nav-link active sidebar-link" aria-current="page"> Home </a>
         </li>
         <li>
-          <a href="#" class="nav-link sidebar-link">
-            Favourites
-          </a>
+          <a href="#" class="nav-link sidebar-link"> Favourites </a>
         </li>
       </ul>
       <hr />
@@ -99,9 +164,105 @@
       </div>
     </div>
 
-    <form action="/recommend" method="post">
-      <!-- <button type="submit">Start Webcam & Get Recommendation</button> -->
-    </form>
+    <!-- JavaScript -->
+    <script>
+      let currentEmotion = null;
+
+      function detectEmotion() {
+        fetch('/get_emotion')
+          .then(response => response.json())
+          .then(data => {
+            const resultDiv = document.getElementById('emotionResult');
+
+            if (data.emotion) {
+              currentEmotion = data.emotion;
+              const emoji = data.emotion === 'happy' ? '😊' : '😢';
+              resultDiv.innerHTML = `
+                <div class="alert alert-${data.emotion === 'happy' ? 'success' : 'warning'}" role="alert">
+                  <h4 class="alert-heading">Mood Detected!</h4>
+                  <p>Your current mood is <strong>${data.emotion.toUpperCase()}</strong> ${emoji}</p>
+                  <hr>
+                  <p class="mb-0">Let's recommend songs that match your mood.</p>
+                </div>
+              `;
+            } else if (data.error) {
+              resultDiv.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                  Error: ${data.error}
+                </div>
+              `;
+            }
+          })
+          .catch(error => {
+            document.getElementById('emotionResult').innerHTML = `
+              <div class="alert alert-danger" role="alert">
+                An unexpected error occurred: ${error.message}
+              </div>
+            `;
+          });
+      }
+
+      function getRecommendations() {
+        if (!currentEmotion) {
+          document.getElementById('recommendations').innerHTML = `
+            <div class="alert alert-warning" role="alert">
+              Please detect your emotion first!
+            </div>
+          `;
+          return;
+        }
+
+        fetch('/recommend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emotion: currentEmotion })
+        })
+          .then(response => response.json())
+          .then(data => {
+            const container = document.getElementById("recommendations");
+            container.innerHTML = "<h5>Recommended Songs:</h5>";
+
+            if (Array.isArray(data.songs) && data.songs.length > 0) {
+              data.songs.forEach(song => {
+                const card = document.createElement("div");
+                card.className = "card bg-dark text-white mb-3";
+
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                const title = document.createElement("h5");
+                title.className = "card-title";
+                title.textContent = song.name || "Unknown Title";
+
+                const artist = document.createElement("p");
+                artist.className = "card-text";
+                artist.textContent = "Artist: " + (song.artist || "Unknown");
+
+                const link = document.createElement("a");
+                link.href = song.url || "#";
+                link.target = "_blank";
+                link.className = "btn btn-outline-light mt-2";
+                link.textContent = "Play on Spotify";
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(artist);
+                cardBody.appendChild(link);
+                card.appendChild(cardBody);
+                container.appendChild(card);
+              });
+            } else {
+              container.innerHTML += "<p>No recommendations available for this mood.</p>";
+            }
+          })
+          .catch(error => {
+            document.getElementById('recommendations').innerHTML = `
+              <div class="alert alert-danger" role="alert">
+                Failed to fetch recommendations: ${error.message}
+              </div>
+            `;
+          });
+      }
+    </script>
     <script src="/static/js/index.js"></script>
   </body>
 </html>

@@ -18,3 +18,17 @@
   }
   });
 
+  document.getElementById('face-scanner').addEventListener('click', function () {
+    fetch('/recommend', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Recommended songs:", data);
+        // Optionally redirect or update UI with results
+    })
+    .catch(error => {
+        console.error('Error recommending songs:', error);
+    });
+});
+
