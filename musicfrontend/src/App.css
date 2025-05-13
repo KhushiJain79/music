@@ -35,8 +35,6 @@ body.light-theme {
 }
 
 .section-player {
-  background-color: var(--box-bg);
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,10 +183,7 @@ body.theme-transition .topbar::before {
 }
 
 .showimage {
-  height: 200px;
-  width: 200px;
   border-radius: 20px;
-  box-shadow: 0 0 20px var(--shadow-color);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 

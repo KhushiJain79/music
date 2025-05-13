@@ -12,7 +12,7 @@ const Home = ({toggleTheme}) => {
           <img
             src={musicplayer}
             className="showimage"
-            alt="Image not showing"
+            alt="Music Player"
           />
           <img
             className="musicwave mt-5"
