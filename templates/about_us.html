@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Mood-Based Music Recommender</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ffffff;
+    }
+
+    h1, h4, h5 {
+      font-weight: bold;
+    }
+
+    .feature-highlight {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .feature-highlight:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.02);
+    }
+
+    .about-section {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .nav-link {
+      color: #ffffff;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">MoodRecommender</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about_us.html">About Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- About Us Content -->
+  <div class="container mt-5 mb-5 about-section">
+    <div class="text-center mb-5">
+      <h1 class="animate__animated animate__fadeInDown">About Us</h1>
+      <p class="lead mt-3 text-light">We use AI to understand your emotions and connect you with music that fits your mood.</p>
+    </div>
+
+    <div>
+      <h4 class="mb-4">Why Use Our Mood Recommender?</h4>
+
+      <div class="feature-highlight">
+        <h5>🎧 Personalized Music Experience</h5>
+        <p>Get songs that match your emotions, whether you're happy, sad, energetic, or relaxed.</p>
+      </div>
+
+      <div class="feature-highlight">
+        <h5>🤖 AI-Powered Mood Detection</h5>
+        <p>Our smart model analyzes your expression and mood to provide accurate music matches.</p>
+      </div>
+
+      <div class="feature-highlight">
+        <h5>⚡ Quick & Interactive</h5>
+        <p>Fast, fun, and interactive design to make discovering new music easy and enjoyable.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

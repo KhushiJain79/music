@@ -38,46 +38,158 @@
       .one {
         margin-top: 120vh;
       }
+
+      #mood-recommendation-container {
+  background-color: #1a1a1a; /* Dark Background */
+  border: 2px solid #333; /* Light border */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#mood-recommendation-container:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0 0 15px rgba(0, 255, 200, 0.6); /* Glowing effect */
+}
+
+.mood-container-image {
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+
+.mood-container-image:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+button {
+  font-weight: bold;
+  padding: 10px 25px;
+  font-size: 1rem;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 200, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #333;
+}
+.card .btn {
+  font-size: 0.85rem;
+}
+body {
+  background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #111, #222);
+  background-size: 400% 400%;
+  animation: backgroundAnimation 15s ease infinite;
+  color: #fff;
+}
+
+@keyframes backgroundAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-glow {
+  text-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffc8;
+}
+
+#emotionResult .alert {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
     </style>
   </head>
 
   <body class="body-container">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4 mb-4">
-      <div class="container-fluid">
-        <a class="navbar-brand text-glow" onclick="toggleSidebar()" href="#">Moodify</a>
-        <button
-          class="navbar-toggler"
-          onclick="toggleSidebar()"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarsExample05"
-          aria-controls="navbarsExample05"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg px-4 mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand text-glow fs-3 fw-bold" onclick="toggleSidebar()" href="#" style="color: #00ffc8;">Moodify</a>
+    <button
+      class="navbar-toggler"
+      onclick="toggleSidebar()"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <form id="searchForm" class="d-flex ms-auto search-bar searchbtn" method="POST" action="/search">
-          <input
-            id="artistSearch"
-            name="artist"
-            class="form-control searchbar"
-            type="search"
-            placeholder="Search Music By Artist"
-            aria-label="Search"
-            required
-          />
-        </form>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        <li class="nav-item">
+          <a class="nav-link text-light mx-2" href="/mood_recommendations">Mood Recommender</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light mx-2" href="/about">About Us</a>
+        </li>
+        <li class="nav-item">
+          <form id="searchForm" class="d-flex search-bar" method="POST" action="/search">
+            <input
+              id="artistSearch"
+              name="artist"
+              class="form-control searchbar"
+              type="search"
+              placeholder="Search Music By Artist"
+              aria-label="Search"
+              required
+            />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-        <button id="themeToggle" class="theme-toggle ms-3">🌙</button>
+<!-- Trending Songs Section -->
+<div class="container mt-5">
+  <h5 class="text-light mb-4">
+    <a href="{{ url_for('trending_songs') }}" class="text-light text-decoration-none fs-5">Arijit Singh Songs</a>
+  </h5>
+  <div class="row">
+    {% for song in trending_tracks[:4] %}
+    <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+      <div class="card bg-dark text-white h-100 shadow-sm">
+        <img src="{{ song.image }}" class="card-img-top" alt="{{ song.name }}" style="height: 130px; object-fit: contain;">
+        <div class="card-body px-2 py-1">
+          <h6 class="card-title mb-1 text-truncate" style="font-size: 0.85rem;">{{ song.name }}</h6>
+          <p class="card-text mb-2 text-truncate" style="font-size: 0.75rem;">Artist: {{ song.artist }}</p>
+          <a href="{{ song.url }}" target="_blank" class="btn btn-success btn-outline-dark btn-sm w-100">Play</a>
+        </div>
       </div>
-    </nav>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
 
     <!-- Top Player Section -->
     <div class="topbar d-flex flex-wrap justify-content-center">
-      <div class="section-player me-4 mb-4">
+      <!-- <div class="section-player me-4 mb-4">
         <img src="./images/videoplayerfinal.png" class="showimage" alt="Image not showing" />
         <img
           class="musicwave mt-3"
@@ -90,10 +202,82 @@
       <div class="content-container">
         {% include "component/content.html" %}
       </div>
+    </div> -->
+
+    <!-- Emotion-based Song Recommendation Section -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card bg-dark text-white shadow-lg border border-secondary rounded-4 overflow-hidden">
+        <div class="row g-0">
+          <div class="col-md-5 d-flex align-items-center justify-content-center p-4 bg-gradient" style="background: linear-gradient(135deg, #00ffc8, #0066ff);">
+            <a href="/mood_recommendations" style="text-decoration: none;">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/711/711191.png"
+                class="img-fluid hover-shadow"
+                alt="Scan Mood"
+                style="max-height: 200px; transition: transform 0.3s ease;"
+                onmouseover="this.style.transform='scale(1.1)'"
+                onmouseout="this.style.transform='scale(1)'"
+              />
+            </a>
+          </div>
+          <div class="col-md-7 p-4 d-flex flex-column justify-content-center">
+            <h4 class="card-title mb-3 text-glow" style="color: #00ffc8;">Feeling Curious?</h4>
+            <p class="card-text text-light">Discover music based on your current emotion! Click the image to scan your mood and get song suggestions tailored just for you.</p>
+            <a href="/mood_recommendations" class="btn btn-outline-light btn-lg mt-3 align-self-start">Try Mood Scanner</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- diljit songs -->
+<div class="container mt-5">
+  <h5 class="text-light mb-4">
+    <a href="{{ url_for('diljit_tracks') }}" class="text-light text-decoration-none fs-5">Diljit Dosanjh Songs</a>
+  </h5>
+  <div class="row">
+    {% for song in d_tracks[:4] %}
+    <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+      <div class="card bg-dark text-white h-100 shadow-sm">
+        <img src="{{ song.image }}" class="card-img-top" alt="{{ song.name }}" style="height: 130px; object-fit: contain;">
+        <div class="card-body px-2 py-1">
+          <h6 class="card-title mb-1 text-truncate" style="font-size: 0.85rem;">{{ song.name }}</h6>
+          <p class="card-text mb-2 text-truncate" style="font-size: 0.75rem;">Artist: {{ song.artist }}</p>
+          <a href="{{ song.url }}" target="_blank" class="btn btn-success btn-outline-dark btn-sm w-100">Play</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+    <!-- Latest Releases Section -->
+<div class="container mt-5">
+  <h5 class="text-light mb-4">
+    <a href="{{ url_for('latest_songs') }}" class="text-light text-decoration-none fs-5">Latest Releases</a>
+  </h5>
+  <div class="row">
+    {% for track in tracks[:4] %}
+    <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+      <div class="card bg-dark text-white h-100 shadow-sm">
+        <img src="{{ track.image }}" class="card-img-top" alt="{{ track.name }}" style="height: 130px; object-fit: contain;">
+        <div class="card-body px-2 py-1">
+          <h6 class="card-title mb-1 text-truncate" style="font-size: 0.85rem;">{{ track.name }}</h6>
+          <p class="card-text mb-2 text-truncate" style="font-size: 0.75rem;">Artist: {{ track.artist }}</p>
+          <a href="{{ track.url }}" target="_blank" class="btn btn-success btn-outline-dark btn-sm w-100">Play</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
 
     <!-- Emotion and Recommendation Section -->
-    <div class="container" style="margin-top: 400px;">
+    <!-- <div class="container" style="margin-top: 400px;">
       <div class="row justify-content-center">
         <div class="col-md-8 text-center">
           <h3 class="text-light mb-3 mt-10">Scan Mood</h3>
@@ -121,7 +305,7 @@
           <div id="recommendations" class="mt-4 text-light"></div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Sidebar -->
     <div
@@ -163,6 +347,35 @@
         </ul>
       </div>
     </div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light mt-5 pt-4 pb-4 border-top border-secondary" style="width: 100vw;">
+  <div class="container-fluid px-5">
+    <div class="row align-items-center justify-content-between">
+      <!-- Left Section: Copyright -->
+      <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+        <p class="mb-0">&copy; {{ current_year }} Moodify. All rights reserved.</p>
+      </div>
+
+      <!-- Center Section: Search by Artist -->
+      <div class="col-md-4 mb-3 mb-md-0">
+        <form action="/search" method="get" class="d-flex justify-content-center">
+          <input type="text" name="artist" class="form-control me-2 bg-secondary text-white border-0" placeholder="Search by artist..." style="max-width: 250px;">
+          <button type="submit" class="btn btn-outline-light">Search</button>
+        </form>
+      </div>
+
+      <!-- Right Section: Navigation Links -->
+      <div class="col-md-4 text-center text-md-end">
+        <a href="/" class="text-light text-decoration-none me-3">Home</a>
+        <a href="/mood_recommendations" class="text-light text-decoration-none me-3">Mood Recommender</a>
+        <a href="/about" class="text-light text-decoration-none">About Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
 
     <!-- JavaScript -->
     <script>

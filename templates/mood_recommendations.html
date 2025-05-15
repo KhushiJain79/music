@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood-Based Music Recommendation</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h3, h5 {
+      font-weight: bold;
+    }
+
+    .card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .mood-container-image {
+      transition: transform 0.4s ease;
+    }
+
+    .mood-container-image:hover {
+      transform: scale(1.1);
+    }
+
+    .btn-primary:hover,
+    .btn-success:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    #emotionResult {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    #recommendation-section {
+      background-color: rgba(255, 255, 255, 0.03);
+      padding: 2rem;
+      border-radius: 10px;
+    }
+
+    .feature-highlight {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .feature-highlight:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h3 class="text-light mb-4">Discover Music Based on Your Mood</h3>
+
+        <!-- Mood Recommendation Card -->
+        <div id="mood-recommendation-container" class="card bg-dark text-white rounded shadow-lg p-4">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+
+            <!-- Mood Image -->
+            <div
+              class="mood-container-image p-5 mb-4 rounded-circle shadow"
+              style="background-image: url('https://cdn-icons-png.flaticon.com/128/7137/7137429.png'); background-size: cover; background-position: center; height: 220px; width: 220px; cursor: pointer;"
+              onmouseover="this.style.backgroundImage = 'url(https://cdn-icons-png.flaticon.com/128/711/711191.png)';"
+              onmouseout="this.style.backgroundImage = 'url(https://cdn-icons-png.flaticon.com/128/7137/7137429.png)';"
+              onclick="detectEmotion()">
+            </div>
+
+            <h5 class="mb-3 text-light">Let Us Know How You Feel!</h5>
+            <p class="text-muted mb-4">Scan your mood and we'll suggest songs tailored to your emotion.</p>
+
+            <!-- Action Buttons -->
+            <div class="mt-4">
+              <button class="btn btn-primary me-3 btn-lg animate__animated animate__pulse animate__infinite" onclick="detectEmotion()">
+                Scan Mood
+              </button>
+              <button class="btn btn-success btn-lg" onclick="getRecommendations()">
+                Get Recommendations
+              </button>
+            </div>
+
+            <!-- Results -->
+            <div id="emotionResult" class="mt-4 fs-5 text-light"></div>
+          </div>
+        </div>
+
+        <!-- Feature Highlights -->
+        <!-- <div class="mt-5 text-light">
+          <h4 class="mb-4">Why Use Our Mood Recommender?</h4>
+          <div class="feature-highlight">
+            <h5>🎧 Personalized Music Experience</h5>
+            <p>Get songs that match your emotions, whether you're happy, sad, energetic, or relaxed.</p>
+          </div>
+          <div class="feature-highlight">
+            <h5>🤖 AI-Powered Mood Detection</h5>
+            <p>Our smart model analyzes your expression and mood to provide accurate music matches.</p>
+          </div>
+          <div class="feature-highlight">
+            <h5>⚡ Quick & Interactive</h5>
+            <p>Fast, fun, and interactive design to make discovering new music easy and enjoyable.</p>
+          </div>
+        </div> -->
+
+        <!-- Song Recommendations Section -->
+        <div id="recommendation-section" class="mt-5 text-light d-none">
+          <h4 class="mb-4">🎶 Your Song Recommendations</h4>
+          <div id="recommendations" class="row g-4"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- API Integration -->
+  <script>
+    let currentEmotion = "";
+
+    async function detectEmotion() {
+      try {
+        const response = await fetch("/get_emotion");
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById("emotionResult").innerText = "Error detecting emotion.";
+          return;
+        }
+
+        currentEmotion = data.emotion;
+        const emoji = currentEmotion.toLowerCase() === 'sad' ? '😢' : '😄';
+        document.getElementById("emotionResult").innerText = `${emoji} Detected Mood: ${currentEmotion.charAt(0).toUpperCase() + currentEmotion.slice(1)}`;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("emotionResult").innerText = "Error connecting to server.";
+      }
+    }
+
+    async function getRecommendations() {
+      if (!currentEmotion) {
+        document.getElementById("recommendations").innerHTML = '<p class="text-warning">Please detect your mood first.</p>';
+        document.getElementById("recommendation-section").classList.remove("d-none");
+        return;
+      }
+
+      try {
+        const response = await fetch("/recommend", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emotion: currentEmotion }),
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById("recommendations").innerText = "Error getting recommendations.";
+          document.getElementById("recommendation-section").classList.remove("d-none");
+          return;
+        }
+
+        const songCards = data.songs.map(song => `
+          <div class="col-md-4">
+            <div class="card bg-dark text-light h-100 shadow-lg border-light">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${song.name}</h5>
+                <p class="card-text">Artist: ${song.artist}</p>
+                ${song.url !== '#' ? `<a href="${song.url}" target="_blank" class="btn btn-outline-info mt-auto">Listen on Spotify</a>` : ''}
+              </div>
+            </div>
+          </div>
+        `).join("");
+
+        document.getElementById("recommendations").innerHTML = songCards;
+        document.getElementById("recommendation-section").classList.remove("d-none");
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById("recommendations").innerText = "Failed to connect to recommendation service.";
+        document.getElementById("recommendation-section").classList.remove("d-none");
+      }
+    }
+  </script>
+</body>
+</html>

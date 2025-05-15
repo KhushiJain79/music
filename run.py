@@ -14,7 +14,9 @@ from emotion_video_classifier import emotion_testing
 import tkinter as tk
 from tkinter import messagebox
 from flask import Flask, render_template, redirect, session, jsonify, request
+import requests
 import spotipy
+
 from spotipy.oauth2 import SpotifyOAuth
 
 app = Flask(__name__)
@@ -36,29 +38,192 @@ sp_oauth = SpotifyOAuth(
     scope=SCOPE,
     cache_path='.spotifycache'
 )
-
-@app.route("/get_token")
-def get_token():
-    auth_response = request.post(
-        "https://accounts.spotify.com/api/token",
-        data={"grant_type": "client_credentials"},
-        auth=(CLIENT_ID, CLIENT_SECRET),
+access_token = ''
+auth_response = requests.post(
+        'https://accounts.spotify.com/api/token',
+        data={'grant_type': 'client_credentials'},
+        auth=(CLIENT_ID, CLIENT_SECRET)
     )
-    return jsonify(auth_response.json())
+access_token = auth_response.json().get('access_token')
+
+client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+# @app.route("/get_token")
+# def get_token():
+#     auth_response = requests.post(
+#         "https://accounts.spotify.com/api/token",
+#         data={"grant_type": "client_credentials"},
+#         auth=(CLIENT_ID, CLIENT_SECRET),
+#     )
+#     return jsonify(auth_response.json())
+
+def get_trending_songs():
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    query = 'Arijit Singh'
+    limit = 50  
+    response = requests.get(
+        f'https://api.spotify.com/v1/search',
+        headers=headers,
+        params={'q': query, 'type': 'track', 'limit': limit}
+    )
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Get the tracks from the response
+        tracks = response.json().get('tracks', {}).get('items', [])
+        arijit_tracks = []
+        
+        for track in tracks:
+            track_info = {
+                'name': track['name'],
+                'artist': ', '.join([artist['name'] for artist in track['artists']]),
+                'url': track['external_urls']['spotify'],
+                'image': track['album']['images'][0]['url'] if track['album']['images'] else None
+            }
+            arijit_tracks.append(track_info)
+
+        return arijit_tracks
+
+def get_latest_releases():
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Fetch new releases
+    new_releases_response = requests.get(
+        'https://api.spotify.com/v1/browse/new-releases',
+        headers=headers,
+        params={'country': 'IN', 'limit': 10}
+    )
+    albums = new_releases_response.json().get('albums', {}).get('items', [])
+
+    # Extract track details from each album
+    tracks = []
+    for album in albums:
+        album_id = album['id']
+        album_name = album['name']
+        album_image = album['images'][0]['url']
+        album_url = album['external_urls']['spotify']
+
+        # Fetch tracks for the album
+        tracks_response = requests.get(
+            f'https://api.spotify.com/v1/albums/{album_id}/tracks',
+            headers=headers
+        )
+        album_tracks = tracks_response.json().get('items', [])
+
+        for track in album_tracks:
+            track_info = {
+                'name': track['name'],
+                'artist': ', '.join([artist['name'] for artist in track['artists']]),
+                'url': track['external_urls']['spotify'],
+                'image': album_image
+            }
+            tracks.append(track_info)
+    return tracks
+
+def get_diljit_songs():
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    query = 'Diljit Dosanjh'
+    limit = 50  
+    response = requests.get(
+        f'https://api.spotify.com/v1/search',
+        headers=headers,
+        params={'q': query, 'type': 'track', 'limit': limit}
+    )
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Get the tracks from the response
+        tracks = response.json().get('tracks', {}).get('items', [])
+        diljit_tracks = []
+        
+        for track in tracks:
+            track_info = {
+                'name': track['name'],
+                'artist': ', '.join([artist['name'] for artist in track['artists']]),
+                'url': track['external_urls']['spotify'],
+                'image': track['album']['images'][0]['url'] if track['album']['images'] else None
+            }
+            diljit_tracks.append(track_info)
+
+        return diljit_tracks
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # A simple form page where users search for artists
+    latest_tracks = get_latest_releases()  # Your existing function
+    trending_tracks = get_trending_songs()  # You must define or already have this
+    d_tracks = get_diljit_songs()
+    # print(trending_tracks)
+    return render_template('index.html', tracks=latest_tracks, trending_tracks=trending_tracks, d_tracks = d_tracks)
+
+@app.route('/about')
+def about():
+    return render_template('about_us.html')
+
+@app.route('/trending')
+def trending_songs():
+    tracks = get_trending_songs()
+    return render_template('trending.html', trending_tracks=tracks)
+
+
+@app.route('/diljit')
+def diljit_tracks():
+    tracks = get_diljit_songs()
+    return render_template('diljit_songs.html', trending_tracks = tracks)
+
+@app.route('/latest_songs')
+def latest_songs():
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Fetch new releases
+    new_releases_response = requests.get(
+        'https://api.spotify.com/v1/browse/new-releases',
+        headers=headers,
+        params={'country': 'IN', 'limit': 10}
+    )
+    albums = new_releases_response.json().get('albums', {}).get('items', [])
+
+    # Extract track details from each album
+    tracks = []
+    for album in albums:
+        album_id = album['id']
+        album_name = album['name']
+        album_image = album['images'][0]['url']
+        album_url = album['external_urls']['spotify']
+
+        # Fetch tracks for the album
+        tracks_response = requests.get(
+            f'https://api.spotify.com/v1/albums/{album_id}/tracks',
+            headers=headers
+        )
+        album_tracks = tracks_response.json().get('items', [])
+
+        for track in album_tracks:
+            track_info = {
+                'name': track['name'],
+                'artist': ', '.join([artist['name'] for artist in track['artists']]),
+                'url': track['external_urls']['spotify'],
+                'image': album_image
+            }
+            tracks.append(track_info)
+
+    return render_template('latest_songs.html', tracks=tracks)
 
 @app.route('/login')
 def login():
     auth_url = sp_oauth.get_authorize_url()
     return redirect(auth_url)
 
+@app.route('/mood_recommendations')
+def mood_page():
+    return render_template('mood_recommendations.html')
+
 @app.route('/search', methods=['GET', 'POST'])
 def search_artist():
-    access_token = 'BQCP8POP7IaByVfnaNyg4GfwsoHV-cg5GL9uEoWuD8q7JQw5pALvyj1soOxCCMCVUM3MmPU0fCRVia_X7b6USzA4fJE2HW8jAi55p2Bhi52vKCCLjtYZNbq1C80uy7lbcOJkRxfdSuH-0akHWjlK86KmXr62Dz1kSAEGbCAUZ-OT_09KVI6jPGyM6nnYQx3MYOGuvZ3RDdobkUqELGXt-XCN6RDbo_54No-mRoWr-VMDvq1nE47JxKzxMw'
+    global access_token
     if isinstance(access_token, str) == False:
         return access_token  # This is a redirect response
 
